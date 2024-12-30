@@ -1,0 +1,12 @@
+{
+  "version": 2,
+  "dgSpecHash": "NEizfcptJfc=",
+  "success": true,
+  "projectFilePath": "C:\\Users\\dharani.govindhasamy\\Downloads\\aws task\\lambda\\src\\lambda\\lambda.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\dharani.govindhasamy\\.nuget\\packages\\amazon.lambda.core\\2.5.0\\amazon.lambda.core.2.5.0.nupkg.sha512",
+    "C:\\Users\\dharani.govindhasamy\\.nuget\\packages\\amazon.lambda.serialization.systemtextjson\\2.4.4\\amazon.lambda.serialization.systemtextjson.2.4.4.nupkg.sha512",
+    "C:\\Users\\dharani.govindhasamy\\.nuget\\packages\\microsoft.netcore.app.crossgen2.win-x64\\8.0.8\\microsoft.netcore.app.crossgen2.win-x64.8.0.8.nupkg.sha512"
+  ],
+  "logs": []
+}

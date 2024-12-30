@@ -1,0 +1,8 @@
+C:\Users\dharani.govindhasamy\Desktop\git sample clone\aws task\.net with s3\ConsoleApp1\publish\ConsoleApp1.exe
+C:\Users\dharani.govindhasamy\Desktop\git sample clone\aws task\.net with s3\ConsoleApp1\publish\ConsoleApp1.dll
+C:\Users\dharani.govindhasamy\Desktop\git sample clone\aws task\.net with s3\ConsoleApp1\publish\ConsoleApp1.deps.json
+C:\Users\dharani.govindhasamy\Desktop\git sample clone\aws task\.net with s3\ConsoleApp1\publish\ConsoleApp1.runtimeconfig.json
+C:\Users\dharani.govindhasamy\Desktop\git sample clone\aws task\.net with s3\ConsoleApp1\publish\ConsoleApp1.pdb
+C:\Users\dharani.govindhasamy\Desktop\git sample clone\aws task\.net with s3\ConsoleApp1\publish\AWSSDK.Core.dll
+C:\Users\dharani.govindhasamy\Desktop\git sample clone\aws task\.net with s3\ConsoleApp1\publish\AWSSDK.S3.dll
+C:\Users\dharani.govindhasamy\Desktop\git sample clone\aws task\.net with s3\ConsoleApp1\publish\Newtonsoft.Json.dll
