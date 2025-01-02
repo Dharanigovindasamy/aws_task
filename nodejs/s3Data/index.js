@@ -116,7 +116,6 @@
 const { S3Client, GetObjectCommand } = require("@aws-sdk/client-s3");
 const { Readable } = require("stream");
 
-// Initialize S3 client
 const s3Client = new S3Client({ region: "us-east-1" });
 
 exports.handler = async (event) => {

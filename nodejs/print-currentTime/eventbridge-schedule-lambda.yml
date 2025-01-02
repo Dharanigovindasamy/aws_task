@@ -1,0 +1,65 @@
+  AWSTemplateFormatVersion: '2010-09-09'
+Description: CloudFormation Template to Create EventBridge Rule and Lambda Function
+
+Resources:
+  LambdaExecutionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - lambda.amazonaws.com
+            Action:
+              - sts:AssumeRole
+      Policies:
+        - PolicyName: LambdaExecutionPolicy
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - logs:CreateLogGroup
+                  - logs:CreateLogStream
+                  - logs:PutLogEvents
+                Resource: "arn:aws:logs:*:*:*"
+              - Effect: Allow
+                Action:
+                  - events:PutTargets
+                  - events:PutRule
+                  - events:DescribeRule
+                Resource: "*"
+
+  LambdaFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      Handler: index.lambda_handler
+      Role: !GetAtt LambdaExecutionRole.Arn
+      Code:
+        ZipFile: |
+          import datetime
+          def lambda_handler(event, context):
+              current_time = datetime.datetime.utcnow()
+              print(f"The Lambda function ran at: {current_time}")
+              return {"statusCode": 200, "body": f"Function ran at {current_time}"}
+      Runtime: python3.9
+      Timeout: 10
+
+  EventBridgeRule:
+    Type: AWS::Events::Rule
+    Properties:
+      ScheduleExpression: rate(15 minutes)
+      State: ENABLED
+      Targets:
+        - Arn: !GetAtt LambdaFunction.Arn
+          Id: LambdaTarget
+
+  LambdaPermissionForEventBridge:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName: !Ref LambdaFunction
+      Action: lambda:InvokeFunction
+      Principal: events.amazonaws.com
+      SourceArn: !GetAtt EventBridgeRule.Arn
