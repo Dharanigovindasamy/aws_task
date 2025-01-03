@@ -17,10 +17,8 @@ namespace ConsoleApp1
 
     class Program
     {
-        private const string accessKey = "AKIAZKDICYPJSAR767N3";
-        private const string secretKey = "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";
-        private const string bucketName = "taskuserdata"; 
-        private const string objectKey = "input data.json"; 
+       
+        // TODO 
 
         static async Task Main(string[] args)
         {

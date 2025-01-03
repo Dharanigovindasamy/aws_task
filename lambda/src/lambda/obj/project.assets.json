@@ -83,11 +83,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\dharani.govindhasamy\\Downloads\\aws task\\lambda\\src\\lambda\\lambda.csproj",
+      "projectUniqueName": "C:\\Users\\dharani.govindhasamy\\Downloads\\aws_task\\lambda\\src\\lambda\\lambda.csproj",
       "projectName": "lambda",
-      "projectPath": "C:\\Users\\dharani.govindhasamy\\Downloads\\aws task\\lambda\\src\\lambda\\lambda.csproj",
+      "projectPath": "C:\\Users\\dharani.govindhasamy\\Downloads\\aws_task\\lambda\\src\\lambda\\lambda.csproj",
       "packagesPath": "C:\\Users\\dharani.govindhasamy\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\dharani.govindhasamy\\Downloads\\aws task\\lambda\\src\\lambda\\obj\\",
+      "outputPath": "C:\\Users\\dharani.govindhasamy\\Downloads\\aws_task\\lambda\\src\\lambda\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\dharani.govindhasamy\\AppData\\Roaming\\NuGet\\NuGet.Config",
