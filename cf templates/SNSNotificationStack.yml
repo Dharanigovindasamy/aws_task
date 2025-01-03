@@ -1,0 +1,37 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: "SNS Email Notification triggered by EventBridge every 15 minutes"
+
+Resources:
+  # Create the SNS Topic
+  SnsTopic:
+    Type: "AWS::SNS::Topic"
+    Properties:
+      TopicName: "SampleNotificationTopic"
+
+  # Create the Email Subscription for SNS Topic
+  SnsSubscription:
+    Type: "AWS::SNS::Subscription"
+    Properties:
+      Protocol: "email"
+      Endpoint: "dharani.govindhasamy@ideas2it.com" 
+      TopicArn: !Ref SnsTopic
+
+  # Create the EventBridge Rule
+  EventBridgeRule:
+    Type: "AWS::Events::Rule"
+    Properties:
+      Name: "Every15MinutesMail"
+      ScheduleExpression: "rate(15 minutes)"
+      State: "ENABLED"
+      Targets:
+        - Arn: !Ref SnsTopic
+          Id: "SnsTopicTarget"
+
+Outputs:
+  SnsTopicArn:
+    Description: "The ARN of the SNS Topic"
+    Value: !Ref SnsTopic
+
+  EventBridgeRuleName:
+    Description: "The Name of the EventBridge Rule"
+    Value: !Ref EventBridgeRule

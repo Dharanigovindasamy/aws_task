@@ -1,0 +1,37 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: "CloudFormation template to create a static website using S3"
+
+Resources:
+  ## S3 Bucket Resource
+  S3Bucket:
+    Type: "AWS::S3::Bucket"
+    Properties: 
+      BucketName: "dharanistaticsite1" # Replace with a unique bucket name
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: false
+        BlockPublicPolicy: false
+        IgnorePublicAcls: false
+        RestrictPublicBuckets: false
+      WebsiteConfiguration: 
+        IndexDocument: "index.html"
+        # ErrorDocument: "error.html"  # Optional, remove if you don't have an error.html file
+
+  ## Bucket Policy to Allow Public Access
+  BucketPolicy: 
+    Type: "AWS::S3::BucketPolicy"
+    Properties: 
+      Bucket: !Ref S3Bucket
+      PolicyDocument: 
+        Version: "2012-10-17"
+        Statement: 
+          - Sid: "PublicReadGetObject"
+            Effect: "Allow"
+            Principal: "*"
+            Action: "s3:GetObject"
+            Resource: !Sub "arn:aws:s3:::${S3Bucket}/*"
+
+Outputs:
+  ## URL for the static website
+  WebsiteURL: 
+    Description: "URL of the static website hosted on S3"
+    Value: !GetAtt S3Bucket.WebsiteURL
