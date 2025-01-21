@@ -1,0 +1,120 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Create an ECS Cluster and run the Docker image from my-ecr-repository
+
+Parameters:
+  VpcId:
+    Type: AWS::EC2::VPC::Id
+    Description: The VPC ID where ECS will run.
+
+  Subnets:
+    Type: List<AWS::EC2::Subnet::Id>
+    Description: A list of subnets for the ECS task.
+
+Resources:
+  # ECS Cluster
+  ECSCluster:
+    Type: AWS::ECS::Cluster
+    Properties:
+      ClusterName: DotNetAppCluster
+
+  # IAM Role for ECS Task Execution (with correct permissions for ECR)
+  TaskExecutionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: ecs-tasks.amazonaws.com
+            Action: sts:AssumeRole
+      Path: /
+      Policies:
+        - PolicyName: ECSExecutionPolicy
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - ecr:GetAuthorizationToken
+                  - ecr:BatchCheckLayerAvailability
+                  - ecr:GetDownloadUrlForLayer
+                  - ecr:BatchGetImage
+                Resource: "arn:aws:ecr:us-east-1:640168412115:repository/my-ecr-repository"
+              - Effect: Allow
+                Action:
+                  - logs:CreateLogStream
+                  - logs:PutLogEvents
+                Resource: "*"
+
+  # CloudWatch Log Group for ECS
+  LogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: /ecs/my-ecr-repository
+      RetentionInDays: 7
+
+  # ECS Task Definition
+  ECSTaskDefinition:
+    Type: AWS::ECS::TaskDefinition
+    Properties:
+      RequiresCompatibilities:
+        - FARGATE
+      Cpu: '512'
+      Memory: '1024'
+      NetworkMode: awsvpc
+      ExecutionRoleArn: arn:aws:iam::640168412115:role/ecsTaskExecutionRole
+      ContainerDefinitions:
+        - Name: DotNetAppContainer
+          Image: 640168412115.dkr.ecr.us-east-1.amazonaws.com/my-ecr-repository:latest
+          Cpu: 256
+          Memory: 512
+          PortMappings:
+            - ContainerPort: 80
+              Protocol: tcp
+          LogConfiguration:
+            LogDriver: awslogs
+            Options:
+              awslogs-group: /ecs/my-ecr-repository
+              awslogs-region: us-east-1
+              awslogs-stream-prefix: ecs
+
+  # Security Group for ECS
+  ECSSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Allow HTTP traffic to ECS tasks
+      VpcId: !Ref VpcId
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 0.0.0.0/0
+
+  # ECS Service
+  ECSService:
+    Type: AWS::ECS::Service
+    Properties:
+      Cluster: !Ref ECSCluster
+      DesiredCount: 1
+      LaunchType: FARGATE
+      TaskDefinition: !Ref ECSTaskDefinition
+      NetworkConfiguration:
+        AwsvpcConfiguration:
+          AssignPublicIp: ENABLED
+          Subnets: !Ref Subnets
+          SecurityGroups:
+            - !Ref ECSSecurityGroup
+
+Outputs:
+  ClusterName:
+    Description: The name of the ECS Cluster.
+    Value: !Ref ECSCluster
+
+  TaskDefinitionArn:
+    Description: The ECS Task Definition ARN.
+    Value: !Ref ECSTaskDefinition
+
+  ECSServiceName:
+    Description: The name of the ECS Service.
+    Value: !Ref ECSService

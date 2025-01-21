@@ -1,0 +1,4 @@
+aws ecr describe-repositories --repository-names <repository-name>
+aws ecr get-login-password --region <region> | docker login --username AWS --password-stdin <account-id>.dkr.ecr.<region>.amazonaws.com
+docker tag dotnet-app-rds:latest <repository-uri>:<tag>
+docker push <repository-uri>:<tag>

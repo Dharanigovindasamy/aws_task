@@ -1,0 +1,92 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "The template used to create an ECS Service from the ECS Console.",
+  "Parameters": {
+    "ECSClusterName": {
+      "Type": "String",
+      "Default": "ecs-cluster1"
+    },
+    "ECSServiceName": {
+      "Type": "String",
+      "Default": "dotnet-service1"
+    },
+    "SecurityGroupIDs": {
+      "Type": "CommaDelimitedList",
+      "Default": "sg-0d258191dfef1e5c2"
+    },
+    "SubnetIDs": {
+      "Type": "CommaDelimitedList",
+      "Default": "subnet-06f641326b15e35f1,subnet-07fbe67094889ea4a,subnet-07c96a8bc347064e9,subnet-0a8d8d15fd2251b3f,subnet-0d46a5192b018fefb,subnet-091fbb697e19ff92e"
+    },
+    "VpcID": {
+      "Type": "String",
+      "Default": "vpc-001909eff2f25c897"
+    },
+    "LoadBalancerName": {
+      "Type": "String",
+      "Default": ""
+    }
+  },
+  "Resources": {
+    "ECSService": {
+      "Type": "AWS::ECS::Service",
+      "Properties": {
+        "Cluster": "ecs-cluster1",
+        "CapacityProviderStrategy": [
+          {
+            "CapacityProvider": "FARGATE",
+            "Base": 0,
+            "Weight": 1
+          }
+        ],
+        "TaskDefinition": "arn:aws:ecs:us-east-1:640168412115:task-definition/dotnetTask1:1",
+        "ServiceName": "dotnet-service1",
+        "SchedulingStrategy": "REPLICA",
+        "DesiredCount": 1,
+        "AvailabilityZoneRebalancing": "ENABLED",
+        "NetworkConfiguration": {
+          "AwsvpcConfiguration": {
+            "AssignPublicIp": "ENABLED",
+            "SecurityGroups": {
+              "Ref": "SecurityGroupIDs"
+            },
+            "Subnets": {
+              "Ref": "SubnetIDs"
+            }
+          }
+        },
+        "PlatformVersion": "LATEST",
+        "DeploymentConfiguration": {
+          "MaximumPercent": 200,
+          "MinimumHealthyPercent": 100,
+          "DeploymentCircuitBreaker": {
+            "Enable": true,
+            "Rollback": true
+          }
+        },
+        "DeploymentController": {
+          "Type": "ECS"
+        },
+        "ServiceConnectConfiguration": {
+          "Enabled": false
+        },
+        "Tags": [],
+        "EnableECSManagedTags": true
+      }
+    }
+  },
+  "Outputs": {
+    "ClusterName": {
+      "Description": "The cluster used to create the service.",
+      "Value": {
+        "Ref": "ECSClusterName"
+      }
+    },
+    "ECSService": {
+      "Description": "The created service.",
+      "Value": {
+        "Ref": "ECSService"
+      }
+    }
+  }
+}
