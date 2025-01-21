@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "0km6zp/fV3g=",
+  "dgSpecHash": "dfqhu8JjpPY=",
   "success": true,
-  "projectFilePath": "C:\\Users\\dharani.govindhasamy\\Desktop\\git sample clone\\aws task\\.net with s3\\ConsoleApp1\\ConsoleApp1.csproj",
+  "projectFilePath": "C:\\Users\\dharani.govindhasamy\\Downloads\\aws_task\\.net with s3\\ConsoleApp1\\ConsoleApp1.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\dharani.govindhasamy\\.nuget\\packages\\awssdk.core\\4.0.0-preview.4\\awssdk.core.4.0.0-preview.4.nupkg.sha512",
     "C:\\Users\\dharani.govindhasamy\\.nuget\\packages\\awssdk.s3\\4.0.0-preview.4\\awssdk.s3.4.0.0-preview.4.nupkg.sha512",

@@ -44,50 +44,6 @@
           }
         }
       }
-    },
-    "net8.0/win-x64": {
-      "AWSSDK.Core/4.0.0-preview.4": {
-        "type": "package",
-        "compile": {
-          "lib/net8.0/AWSSDK.Core.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "runtime": {
-          "lib/net8.0/AWSSDK.Core.dll": {
-            "related": ".pdb;.xml"
-          }
-        }
-      },
-      "AWSSDK.S3/4.0.0-preview.4": {
-        "type": "package",
-        "dependencies": {
-          "AWSSDK.Core": "[4.0.0-preview.4, 5.0.0-preview.4)"
-        },
-        "compile": {
-          "lib/net8.0/AWSSDK.S3.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "runtime": {
-          "lib/net8.0/AWSSDK.S3.dll": {
-            "related": ".pdb;.xml"
-          }
-        }
-      },
-      "Newtonsoft.Json/13.0.3": {
-        "type": "package",
-        "compile": {
-          "lib/net6.0/Newtonsoft.Json.dll": {
-            "related": ".xml"
-          }
-        },
-        "runtime": {
-          "lib/net6.0/Newtonsoft.Json.dll": {
-            "related": ".xml"
-          }
-        }
-      }
     }
   },
   "libraries": {
@@ -189,11 +145,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\dharani.govindhasamy\\Desktop\\git sample clone\\aws task\\.net with s3\\ConsoleApp1\\ConsoleApp1.csproj",
+      "projectUniqueName": "C:\\Users\\dharani.govindhasamy\\Downloads\\aws_task\\.net with s3\\ConsoleApp1\\ConsoleApp1.csproj",
       "projectName": "ConsoleApp1",
-      "projectPath": "C:\\Users\\dharani.govindhasamy\\Desktop\\git sample clone\\aws task\\.net with s3\\ConsoleApp1\\ConsoleApp1.csproj",
+      "projectPath": "C:\\Users\\dharani.govindhasamy\\Downloads\\aws_task\\.net with s3\\ConsoleApp1\\ConsoleApp1.csproj",
       "packagesPath": "C:\\Users\\dharani.govindhasamy\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\dharani.govindhasamy\\Desktop\\git sample clone\\aws task\\.net with s3\\ConsoleApp1\\obj\\",
+      "outputPath": "C:\\Users\\dharani.govindhasamy\\Downloads\\aws_task\\.net with s3\\ConsoleApp1\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\dharani.govindhasamy\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -254,11 +210,6 @@
           }
         },
         "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.400/PortableRuntimeIdentifierGraph.json"
-      }
-    },
-    "runtimes": {
-      "win-x64": {
-        "#import": []
       }
     }
   }

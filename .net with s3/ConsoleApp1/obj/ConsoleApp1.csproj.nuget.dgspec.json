@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\dharani.govindhasamy\\Desktop\\git sample clone\\aws task\\.net with s3\\ConsoleApp1\\ConsoleApp1.csproj": {}
+    "C:\\Users\\dharani.govindhasamy\\Downloads\\aws_task\\.net with s3\\ConsoleApp1\\ConsoleApp1.csproj": {}
   },
   "projects": {
-    "C:\\Users\\dharani.govindhasamy\\Desktop\\git sample clone\\aws task\\.net with s3\\ConsoleApp1\\ConsoleApp1.csproj": {
+    "C:\\Users\\dharani.govindhasamy\\Downloads\\aws_task\\.net with s3\\ConsoleApp1\\ConsoleApp1.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\dharani.govindhasamy\\Desktop\\git sample clone\\aws task\\.net with s3\\ConsoleApp1\\ConsoleApp1.csproj",
+        "projectUniqueName": "C:\\Users\\dharani.govindhasamy\\Downloads\\aws_task\\.net with s3\\ConsoleApp1\\ConsoleApp1.csproj",
         "projectName": "ConsoleApp1",
-        "projectPath": "C:\\Users\\dharani.govindhasamy\\Desktop\\git sample clone\\aws task\\.net with s3\\ConsoleApp1\\ConsoleApp1.csproj",
+        "projectPath": "C:\\Users\\dharani.govindhasamy\\Downloads\\aws_task\\.net with s3\\ConsoleApp1\\ConsoleApp1.csproj",
         "packagesPath": "C:\\Users\\dharani.govindhasamy\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\dharani.govindhasamy\\Desktop\\git sample clone\\aws task\\.net with s3\\ConsoleApp1\\obj\\",
+        "outputPath": "C:\\Users\\dharani.govindhasamy\\Downloads\\aws_task\\.net with s3\\ConsoleApp1\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\dharani.govindhasamy\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -72,11 +72,6 @@
             }
           },
           "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.400/PortableRuntimeIdentifierGraph.json"
-        }
-      },
-      "runtimes": {
-        "win-x64": {
-          "#import": []
         }
       }
     }
