@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\dharani.govindhasamy\\Desktop\\git sample clone\\aws task\\sample\\sample.csproj": {}
+    "C:\\Users\\dharani.govindhasamy\\Downloads\\aws_task\\sample\\sample.csproj": {}
   },
   "projects": {
-    "C:\\Users\\dharani.govindhasamy\\Desktop\\git sample clone\\aws task\\sample\\sample.csproj": {
+    "C:\\Users\\dharani.govindhasamy\\Downloads\\aws_task\\sample\\sample.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\dharani.govindhasamy\\Desktop\\git sample clone\\aws task\\sample\\sample.csproj",
+        "projectUniqueName": "C:\\Users\\dharani.govindhasamy\\Downloads\\aws_task\\sample\\sample.csproj",
         "projectName": "sample",
-        "projectPath": "C:\\Users\\dharani.govindhasamy\\Desktop\\git sample clone\\aws task\\sample\\sample.csproj",
+        "projectPath": "C:\\Users\\dharani.govindhasamy\\Downloads\\aws_task\\sample\\sample.csproj",
         "packagesPath": "C:\\Users\\dharani.govindhasamy\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\dharani.govindhasamy\\Desktop\\git sample clone\\aws task\\sample\\obj\\",
+        "outputPath": "C:\\Users\\dharani.govindhasamy\\Downloads\\aws_task\\sample\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\dharani.govindhasamy\\AppData\\Roaming\\NuGet\\NuGet.Config",
