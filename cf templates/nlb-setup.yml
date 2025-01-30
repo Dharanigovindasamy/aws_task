@@ -1,0 +1,46 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Network Load Balancer and Target Group for ECS
+
+Resources:
+  NLB:
+    Type: AWS::ElasticLoadBalancingV2::LoadBalancer
+    Properties:
+      Name: ECSNLB
+      Scheme: internet-facing
+      Type: network
+      Subnets:
+        - subnet-06f641326b15e35f1
+        - subnet-07c96a8bc347064e9
+        - subnet-0a8d8d15fd2251b3f
+        - subnet-0d46a5192b018fefb
+        - subnet-091fbb697e19ff92e
+        - subnet-07fbe67094889ea4a
+      LoadBalancerAttributes:
+        - Key: load_balancing.cross_zone.enabled
+          Value: 'true'
+
+  TargetGroup:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      Name: ECSNLBTargetGroup
+      Port: 80
+      Protocol: TCP
+      TargetType: ip
+      VpcId: vpc-001909eff2f25c897  # Your VPC ID
+      HealthCheckProtocol: HTTP
+      HealthCheckPort: 80
+      HealthCheckPath: /
+      HealthCheckIntervalSeconds: 30
+      HealthCheckTimeoutSeconds: 5
+      HealthyThresholdCount: 3
+      UnhealthyThresholdCount: 3
+
+  NLBListener:
+    Type: AWS::ElasticLoadBalancingV2::Listener
+    Properties:
+      LoadBalancerArn: !Ref NLB
+      Port: 80
+      Protocol: TCP
+      DefaultActions:
+        - Type: forward
+          TargetGroupArn: !Ref TargetGroup

@@ -18,7 +18,7 @@ WORKDIR /app
 COPY --from=build-env /app/out ./
 
 # Expose the ports you want to use (for HTTP and HTTPS)
-EXPOSE 5005 5005
+EXPOSE 80 5005
 
 # Environment variable for ASP.NET Core to listen on all IP addresses in the container
 #ENV ASPNETCORE_URLS=http://+:80;https://+:443

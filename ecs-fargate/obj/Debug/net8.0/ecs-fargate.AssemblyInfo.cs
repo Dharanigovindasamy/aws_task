@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ecs-fargate")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+9ded6ab273a8da6600d98ce448c7bb6d75eb64c6")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+aea072920f90335547661af4c1b09887f6848697")]
 [assembly: System.Reflection.AssemblyProductAttribute("ecs-fargate")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ecs-fargate")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

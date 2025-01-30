@@ -1,0 +1,74 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: ECS Cluster and Task Definition
+
+Parameters:
+  VpcId:
+    Type: AWS::EC2::VPC::Id
+    Description: The VPC ID where ECS will run.
+    Default: vpc-001909eff2f25c897  # Your VPC ID
+
+  Subnets:
+    Type: List<AWS::EC2::Subnet::Id>
+    Description: A list of subnets for ECS tasks, NLB, and API Gateway.
+    Default:
+      - subnet-06f641326b15e35f1
+      - subnet-07c96a8bc347064e9
+      - subnet-0a8d8d15fd2251b3f
+      - subnet-0d46a5192b018fefb
+      - subnet-091fbb697e19ff92e
+      - subnet-07fbe67094889ea4a
+
+Resources:
+  ECSCluster:
+    Type: AWS::ECS::Cluster
+    Properties:
+      ClusterName: ECSWithAPIGatewayCluster
+
+  TaskExecutionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: ecs-tasks.amazonaws.com
+            Action: sts:AssumeRole
+      Policies:
+        - PolicyName: ECSExecutionPolicy
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - ecr:GetAuthorizationToken
+                  - ecr:BatchCheckLayerAvailability
+                  - ecr:GetDownloadUrlForLayer
+                  - ecr:BatchGetImage
+                  - logs:CreateLogStream
+                  - logs:PutLogEvents
+                Resource: '*'
+
+  ECSTaskDefinition:
+    Type: AWS::ECS::TaskDefinition
+    Properties:
+      RequiresCompatibilities:
+        - FARGATE
+      Cpu: '512'
+      Memory: '1024'
+      NetworkMode: awsvpc
+      ExecutionRoleArn: !GetAtt TaskExecutionRole.Arn
+      ContainerDefinitions:
+        - Name: MyAppContainer
+          Image: 640168412115.dkr.ecr.us-east-1.amazonaws.com/ecr-rds-repository:latest
+          Cpu: 256
+          Memory: 512
+          PortMappings:
+            - ContainerPort: 80
+              Protocol: tcp
+          LogConfiguration:
+            LogDriver: awslogs
+            Options:
+              awslogs-group: /ecs/ecr-rds-repository
+              awslogs-region: us-east-1
+              awslogs-stream-prefix: ecs

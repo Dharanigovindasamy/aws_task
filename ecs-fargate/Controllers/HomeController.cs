@@ -17,6 +17,7 @@ public class HomeController : ControllerBase
     public IActionResult GetCurrentTime()
     {
         var connectionString = _configuration.GetConnectionString("DefaultConnection");
+        Console.WriteLine(connectionString);
 
         try
         {

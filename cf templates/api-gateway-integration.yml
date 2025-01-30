@@ -1,0 +1,38 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: API Gateway Integration for ECS with NLB
+
+Resources:
+  APIGatewayRestApi:
+    Type: AWS::ApiGatewayV2::Api
+    Properties:
+      Name: ECSWithAPIGateway
+      ProtocolType: HTTP
+
+  APIGatewayIntegration:
+    Type: AWS::ApiGatewayV2::Integration
+    Properties:
+      ApiId: !Ref APIGatewayRestApi
+      IntegrationType: HTTP_PROXY
+      IntegrationUri: !Sub "http://${NLB.DNSName}" # Links NLB to API Gateway
+      PayloadFormatVersion: "1.0"
+      IntegrationMethod: ANY
+
+  APIGatewayRoute:
+    Type: AWS::ApiGatewayV2::Route
+    Properties:
+      ApiId: !Ref APIGatewayRestApi
+      RouteKey: "ANY /{proxy+}"
+      Target: !Sub "integrations/${APIGatewayIntegration}"
+
+  APIGatewayDeployment:
+    Type: AWS::ApiGatewayV2::Deployment
+    DependsOn: APIGatewayRoute
+    Properties:
+      ApiId: !Ref APIGatewayRestApi
+
+  APIGatewayStage:
+    Type: AWS::ApiGatewayV2::Stage
+    Properties:
+      ApiId: !Ref APIGatewayRestApi
+      DeploymentId: !Ref APIGatewayDeployment
+      StageName: prod
