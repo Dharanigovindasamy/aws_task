@@ -1,0 +1,40 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      dotnet: 8.0.400  # Ensure that the dotnet version is correct
+    commands:
+      - echo Installing .NET dependencies
+      - curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --channel LTS
+      - export PATH=$PATH:$HOME/.dotnet
+      - echo .NET SDK installed to: $HOME/.dotnet
+      - dotnet --version  # Verify .NET SDK version
+      - echo Installing AWS CLI
+      - pip install --upgrade awscli
+
+  pre_build:
+    commands:
+      - echo Logging in to Amazon ECR...
+      - aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 640168412115.dkr.ecr.us-east-1.amazonaws.com
+      - echo Restoring .NET dependencies...
+      - dotnet restore aws_task/ecs-fargate/aws_task.csproj  # Specify the full path to the .csproj file
+      - echo .NET restore completed
+
+  build:
+    commands:
+      - echo Building the .NET application...
+      - dotnet build aws_task/ecs-fargate/aws_task.csproj --configuration Release
+      - echo Building Docker image...
+      - docker build -t simple-docker-service-0afff1e6c27f:latest -f aws_task/ecs-fargate/Dockerfile .
+
+  post_build:
+    commands:
+      - echo Tagging Docker image...
+      - docker tag simple-docker-service-0afff1e6c27f:latest 640168412115.dkr.ecr.us-east-1.amazonaws.com/simple-docker-service-0afff1e6c27f:latest
+      - echo Pushing Docker image to ECR...
+      - docker push 640168412115.dkr.ecr.us-east-1.amazonaws.com/simple-docker-service-0afff1e6c27f:latest
+
+artifacts:
+  files:
+    - '**/*'
