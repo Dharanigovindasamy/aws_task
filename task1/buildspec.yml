@@ -1,0 +1,19 @@
+version: 0.2
+
+phases:
+  install:
+    commands:
+      - echo Installing AWS CLI...
+      - apt-get update && apt-get install -y awscli
+
+  build:
+    commands:
+      - echo Uploading website files to S3...
+      - aws s3 cp aws_task/task1/index.html s3://staticwerbsite-deploy-codepipeline/ --acl public-read
+      - aws s3 cp aws_task/task1/styles.css s3://staticwerbsite-deploy-codepipeline/ --acl public-read
+      - aws s3 cp aws_task/task1/scripts.js s3://staticwerbsite-deploy-codepipeline/ --acl public-read
+
+artifacts:
+  files:
+    - '**/*'
+  discard-paths: yes
