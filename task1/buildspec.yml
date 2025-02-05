@@ -4,13 +4,14 @@ phases:
   install:
     commands:
       - echo Installing AWS CLI...
-      - apt-get update && apt-get install -y awscli
-
+      - yum install -y aws-cli
   build:
     commands:
-      - echo Uploading website files to S3...
-      - aws s3 cp aws_task/task1/index.html s3://staticwerbsite-deploy-codepipeline/ --acl public-read
-      - aws s3 cp aws_task/task1/styles.css s3://staticwerbsite-deploy-codepipeline/ --acl public-read
-      - aws s3 cp aws_task/task1/scripts.js s3://staticwerbsite-deploy-codepipeline/ --acl public-read
-
-
+      - echo "Building application ${APPLICATION_NAME}..."
+      - cd ${APPLICATION_NAME}
+      - echo "Running build commands for ${APPLICATION_NAME}"
+      # Add any specific build steps for task1 here
+  post_build:
+    commands:
+      - echo "Deploying ${APPLICATION_NAME} files to S3..."
+      - aws s3 cp . s3://staticwebsite-deploy-codepipeline --recursive --exclude ".git/*" --exclude "buildspec.yml"
