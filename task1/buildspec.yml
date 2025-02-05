@@ -13,7 +13,4 @@ phases:
       - aws s3 cp aws_task/task1/styles.css s3://staticwerbsite-deploy-codepipeline/ --acl public-read
       - aws s3 cp aws_task/task1/scripts.js s3://staticwerbsite-deploy-codepipeline/ --acl public-read
 
-artifacts:
-  files:
-    - '**/*'
-  discard-paths: yes
+
