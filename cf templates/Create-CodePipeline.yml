@@ -1,0 +1,178 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: CodePipeline with CodeBuild to build and push Docker image to ECR.
+
+Parameters:
+  RepositoryName:
+    Type: String
+    Default: simple-docker-service-0afff1e6c27f
+    Description: ECR repository name
+
+  RepositoryUri:
+    Type: String
+    Default: 640168412115.dkr.ecr.us-east-1.amazonaws.com/simple-docker-service-0afff1e6c27f
+    Description: ECR repository URL
+
+  GitHubRepo:
+    Type: String
+    Default: Dharanigovindasamy/codePipeline
+    Description: GitHub repository (owner/repo)
+
+  GitHubBranch:
+    Type: String
+    Default: main
+    Description: GitHub branch to trigger pipeline
+
+  GitHubToken:
+    Type: String
+    NoEcho: true
+    Description: GitHub OAuth token for webhook integration
+
+Resources:
+  # IAM Role for CodeBuild
+  CodeBuildServiceRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: CodeBuildServiceRoleCFRole
+      AssumeRolePolicyDocument:
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: codebuild.amazonaws.com
+            Action: sts:AssumeRole
+      Policies:
+        - PolicyName: CodeBuildECRPolicy
+          PolicyDocument:
+            Statement:
+              - Effect: Allow
+                Action:
+                  - ecr:GetAuthorizationToken
+                  - ecr:BatchCheckLayerAvailability
+                  - ecr:GetDownloadUrlForLayer
+                  - ecr:PutImage
+                  - ecr:InitiateLayerUpload
+                  - ecr:UploadLayerPart
+                  - ecr:CompleteLayerUpload
+                  - logs:CreateLogGroup
+                  - logs:CreateLogStream
+                  - logs:PutLogEvents
+                Resource: '*'
+              - Effect: Allow
+                Action:
+                  - s3:GetObject
+                  - s3:ListBucket
+                Resource:
+                  - !Sub arn:aws:s3:::codepipeline-artifacts-${AWS::AccountId}
+                  - !Sub arn:aws:s3:::codepipeline-artifacts-${AWS::AccountId}/*
+              - Effect: Allow
+                Action:
+                  - secretsmanager:GetSecretValue
+                Resource: arn:aws:secretsmanager:us-east-1:640168412115:secret:CodePipelineAccessToken-*
+
+  # AWS CodeBuild Project
+  CodeBuildProject:
+    Type: AWS::CodeBuild::Project
+    Properties:
+      Name: DockerBuildProject
+      ServiceRole: !GetAtt CodeBuildServiceRole.Arn
+      Artifacts:
+        Type: NO_ARTIFACTS
+      Environment:
+        ComputeType: BUILD_GENERAL1_SMALL
+        Image: aws/codebuild/amazonlinux-x86_64-standard:5.0
+        Type: LINUX_CONTAINER
+        PrivilegedMode: true
+        EnvironmentVariables:
+          - Name: ECR_REPO
+            Value: !Ref RepositoryUri
+      Source:
+        Type: GITHUB
+        Location: !Sub https://github.com/${GitHubRepo}.git
+        BuildSpec: buildspec.yml
+      TimeoutInMinutes: 10
+      SourceVersion: !Ref GitHubBranch
+
+  # IAM Role for CodePipeline
+  CodePipelineRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: CodePipelineServiceCFRole
+      AssumeRolePolicyDocument:
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: codepipeline.amazonaws.com
+            Action: sts:AssumeRole
+      Policies:
+        - PolicyName: CodePipelinePolicy
+          PolicyDocument:
+            Statement:
+              - Effect: Allow
+                Action:
+                  - codebuild:StartBuild
+                  - codebuild:BatchGetBuilds
+                  - codestar-connections:UseConnection
+                Resource: '*'
+              - Effect: Allow
+                Action:
+                  - s3:GetObject
+                  - s3:PutObject
+                  - s3:ListBucket
+                  - s3:GetBucketLocation
+                Resource:
+                  - !Sub arn:aws:s3:::codepipeline-artifacts-${AWS::AccountId}
+                  - !Sub arn:aws:s3:::codepipeline-artifacts-${AWS::AccountId}/*
+
+  # AWS CodePipeline
+  CodePipeline:
+    Type: AWS::CodePipeline::Pipeline
+    Properties:
+      Name: DockerPipeline
+      RoleArn: !GetAtt CodePipelineRole.Arn
+      ArtifactStore:
+        Type: S3
+        Location: !Sub codepipeline-artifacts-${AWS::AccountId} # Ensure this bucket exists!
+      Stages:
+        - Name: Source
+          Actions:
+            - Name: GitHubSource
+              ActionTypeId:
+                Category: Source
+                Owner: ThirdParty
+                Provider: GitHub
+                Version: 1
+              OutputArtifacts:
+                - Name: SourceOutput
+              Configuration:
+                Owner: !Select
+                  - 0
+                  - !Split
+                    - /
+                    - !Ref GitHubRepo
+                Repo: !Select
+                  - 1
+                  - !Split
+                    - /
+                    - !Ref GitHubRepo
+                Branch: !Ref GitHubBranch
+                OAuthToken: !Ref GitHubToken
+                PollForSourceChanges: false
+              RunOrder: 1
+
+        - Name: Build
+          Actions:
+            - Name: CodeBuild
+              ActionTypeId:
+                Category: Build
+                Owner: AWS
+                Provider: CodeBuild
+                Version: 1
+              InputArtifacts:
+                - Name: SourceOutput
+              Configuration:
+                ProjectName: !Ref CodeBuildProject
+              RunOrder: 1
+
+Outputs:
+  PipelineName:
+    Value: !Ref CodePipeline
+    Description: CodePipeline Name
